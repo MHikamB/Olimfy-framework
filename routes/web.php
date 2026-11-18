@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CompetitionController;
+use App\Http\Controllers\OrganizerDashboardController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,7 +34,16 @@ Route::middleware(['auth', 'role:penyelenggara'])
     ->prefix('penyelenggara')
     ->name('penyelenggara.')
     ->group(function () {
-        Route::view('/dashboard', 'penyelenggara.dashboard')->name('dashboard');
+        Route::get('/dashboard', [OrganizerDashboardController::class, 'index'])->name('dashboard');
+
+        // CRUD Lomba
+        Route::resource('lomba', CompetitionController::class)
+            ->except(['show'])
+            ->parameters(['lomba' => 'id']);
+
+        // Validasi berkas pendaftaran tim
+        Route::get('/validasi', [VerificationController::class, 'index'])->name('validasi.index');
+        Route::patch('/validasi/{id}', [VerificationController::class, 'updateStatus'])->name('validasi.update');
     });
 
 /*
