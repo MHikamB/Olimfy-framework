@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -43,4 +45,11 @@ Route::middleware(['auth', 'role:peserta'])
     ->name('peserta.')
     ->group(function () {
         Route::view('/dashboard', 'peserta.dashboard')->name('dashboard');
+
+        // Pendaftaran Tim & Pembayaran (Ashar)
+        Route::get('/daftar/{competition_id}', [RegistrationController::class, 'create'])->name('daftar.create');
+        Route::post('/daftar', [RegistrationController::class, 'store'])->name('daftar.store');
+        Route::get('/pendaftaran', [RegistrationController::class, 'index'])->name('pendaftaran.index');
+        Route::get('/invoice/{id}', [PaymentController::class, 'show'])->name('invoice.show');
+        Route::post('/invoice/{id}/bayar', [PaymentController::class, 'simulasiBayar'])->name('invoice.bayar');
     });

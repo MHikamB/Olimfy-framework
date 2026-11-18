@@ -16,8 +16,24 @@
 
 <li class="nav-item">
     <a href="{{ url('peserta/pendaftaran') }}"
-       class="nav-link {{ request()->is('peserta/pendaftaran*') ? 'active' : '' }}">
+       class="nav-link {{ request()->is('peserta/pendaftaran*', 'peserta/daftar*', 'peserta/invoice*') ? 'active' : '' }}">
         <i class="nav-icon bi bi-journal-check" aria-hidden="true"></i>
         <p>Pendaftaran Saya</p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="{{ url('peserta/bookmarks') }}"
+       class="nav-link {{ request()->is('peserta/bookmarks*') ? 'active' : '' }}">
+        <i class="nav-icon bi bi-bookmark-heart" aria-hidden="true"></i>
+        <p>Kompetisi Disimpan</p>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="{{ url('peserta/profil') }}"
+       class="nav-link {{ request()->is('peserta/profil*') ? 'active' : '' }}">
+        <i class="nav-icon bi bi-person-gear" aria-hidden="true"></i>
+        <p>Profil Akun</p>
     </a>
 </li>
