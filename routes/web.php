@@ -7,6 +7,12 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ExploreController;
+use App\Http\Controllers\CompetitionDetailController;
+use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\ParticipantDashboardController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -65,3 +71,16 @@ Route::middleware(['auth', 'role:peserta'])
         Route::get('/invoice/{id}', [PaymentController::class, 'show'])->name('invoice.show');
         Route::post('/invoice/{id}/bayar', [PaymentController::class, 'simulasiBayar'])->name('invoice.bayar');
     });
+
+// ZONA 3: HIKAM (Publik & Profil Peserta)
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
+Route::get('/lomba/{id}', [CompetitionDetailController::class, 'show'])->name('lomba.detail');
+
+Route::middleware(['auth'])->prefix('peserta')->group(function () {
+    Route::get('/dashboard', [ParticipantDashboardController::class, 'index'])->name('peserta.dashboard');
+    Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks.index');
+    Route::post('/bookmarks/{id}/toggle', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
+    Route::get('/profil', [ProfileController::class, 'edit'])->name('peserta.profil.edit');
+    Route::put('/profil', [ProfileController::class, 'update'])->name('peserta.profil.update');
+});

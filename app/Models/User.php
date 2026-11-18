@@ -65,4 +65,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Competition::class, 'organizer_id');
     }
+
+    public function pesertaProfile()
+    {
+        return $this->hasOne(PesertaProfile::class);
+    }
+
+    public function bookmarkedCompetitions()
+    {
+        return $this->belongsToMany(Competition::class, 'bookmarks', 'user_id', 'competition_id')->withTimestamps();
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
 }
