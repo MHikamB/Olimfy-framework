@@ -50,8 +50,13 @@ class Competition extends Model
     /**
      * Get the organizer that owns the competition.
      */
-    public function organizer(): BelongsTo
+    public function organizer()
     {
         return $this->belongsTo(User::class, 'organizer_id');
+    }
+
+    public function bookmarkedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'bookmarks', 'competition_id', 'user_id')->withTimestamps();
     }
 }
