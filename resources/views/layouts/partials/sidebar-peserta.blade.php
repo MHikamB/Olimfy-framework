@@ -23,6 +23,14 @@
 </li>
 
 <li class="nav-item">
+    <a href="{{ url('peserta/submission') }}"
+       class="nav-link {{ request()->is('peserta/submission*') ? 'active' : '' }}">
+        <i class="nav-icon bi bi-cloud-arrow-up" aria-hidden="true"></i>
+        <p>Pengumpulan Karya</p>
+    </a>
+</li>
+
+<li class="nav-item">
     <a href="{{ url('peserta/bookmarks') }}"
        class="nav-link {{ request()->is('peserta/bookmarks*') ? 'active' : '' }}">
         <i class="nav-icon bi bi-bookmark-heart" aria-hidden="true"></i>

@@ -61,8 +61,12 @@ if (! function_exists('statusBadge')) {
             'menunggu_verifikasi' => '<span class="badge bg-warning text-dark">Menunggu Verifikasi</span>',
             'diterima' => '<span class="badge bg-success">Lolos Seleksi</span>',
             'ditolak' => '<span class="badge bg-danger">Berkas Ditolak</span>',
+            'dibatalkan' => '<span class="badge bg-dark">Dibatalkan</span>',
             'lunas' => '<span class="badge bg-success">Lunas</span>',
             'menunggu_pembayaran' => '<span class="badge bg-secondary">Belum Bayar</span>',
+            'dikirim' => '<span class="badge bg-info text-dark">Karya Dikirim</span>',
+            'dinilai' => '<span class="badge bg-primary">Sudah Dinilai</span>',
+            'finalis' => '<span class="badge bg-warning text-dark">Finalis</span>',
             default => '<span class="badge bg-light text-dark">'.e((string) $status).'</span>',
         };
     }

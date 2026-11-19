@@ -64,4 +64,12 @@ class Registration extends Model
     {
         return $this->hasOne(Payment::class);
     }
+
+    /**
+     * Data pengumpulan karya lomba untuk pendaftaran ini.
+     */
+    public function submission(): HasOne
+    {
+        return $this->hasOne(Submission::class);
+    }
 }

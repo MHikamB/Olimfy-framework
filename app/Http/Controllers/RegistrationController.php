@@ -74,6 +74,7 @@ class RegistrationController extends Controller
 
             $payment = Payment::create([
                 'registration_id' => $registration->id,
+                'paid_by' => $isFree ? Auth::id() : null,
                 'kode_invoice' => sprintf('INV-OLIMFY-%s-%04d', now()->format('Ymd'), $registration->id),
                 'nominal' => $competition->biaya_pendaftaran,
                 'metode_pembayaran' => $isFree ? 'Gratis' : 'QRIS / Virtual Account',

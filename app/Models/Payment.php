@@ -17,6 +17,7 @@ class Payment extends Model
      */
     protected $fillable = [
         'registration_id',
+        'paid_by',
         'kode_invoice',
         'nominal',
         'metode_pembayaran',
@@ -43,5 +44,13 @@ class Payment extends Model
     public function registration(): BelongsTo
     {
         return $this->belongsTo(Registration::class);
+    }
+
+    /**
+     * Akun peserta yang melakukan pembayaran.
+     */
+    public function payer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'paid_by');
     }
 }
