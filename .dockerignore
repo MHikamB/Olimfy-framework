@@ -1,0 +1,10 @@
+.git
+.env
+node_modules
+vendor
+storage/logs/*
+bootstrap/cache/*
+PANDUAN_*
+TIMELINE_*
+*.docx
+_backup_native_php

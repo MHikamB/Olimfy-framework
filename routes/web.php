@@ -1,18 +1,20 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CompetitionController;
+use App\Http\Controllers\CompetitionDetailController;
+use App\Http\Controllers\ExploreController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrganizerDashboardController;
+use App\Http\Controllers\ParticipantDashboardController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ExploreController;
-use App\Http\Controllers\CompetitionDetailController;
-use App\Http\Controllers\BookmarkController;
-use App\Http\Controllers\ParticipantDashboardController;
-use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,6 +52,11 @@ Route::middleware(['auth', 'role:penyelenggara'])
         // Validasi berkas pendaftaran tim
         Route::get('/validasi', [VerificationController::class, 'index'])->name('validasi.index');
         Route::patch('/validasi/{id}', [VerificationController::class, 'updateStatus'])->name('validasi.update');
+
+        // Penilaian karya & Laporan Query Builder (Ashar - UAS Step 1)
+        Route::get('/submission', [SubmissionController::class, 'organizerIndex'])->name('submission.index');
+        Route::patch('/submission/{id}/nilai', [SubmissionController::class, 'grade'])->name('submission.grade');
+        Route::get('/laporan', [ReportController::class, 'index'])->name('laporan.index');
     });
 
 /*
@@ -70,6 +77,11 @@ Route::middleware(['auth', 'role:peserta'])
         Route::get('/pendaftaran', [RegistrationController::class, 'index'])->name('pendaftaran.index');
         Route::get('/invoice/{id}', [PaymentController::class, 'show'])->name('invoice.show');
         Route::post('/invoice/{id}/bayar', [PaymentController::class, 'simulasiBayar'])->name('invoice.bayar');
+
+        // Pengumpulan Karya (Ashar - UAS Step 1)
+        Route::get('/submission', [SubmissionController::class, 'index'])->name('submission.index');
+        Route::get('/submission/{registration_id}', [SubmissionController::class, 'create'])->name('submission.create');
+        Route::post('/submission/{registration_id}', [SubmissionController::class, 'store'])->name('submission.store');
     });
 
 // ZONA 3: HIKAM (Publik & Profil Peserta)
