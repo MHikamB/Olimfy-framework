@@ -23,7 +23,21 @@ class Registration extends Model
         'nama_tim',
         'status_verifikasi',
         'catatan_kurasi',
+        'verified_by',
+        'verified_at',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'verified_at' => 'datetime',
+        ];
+    }
 
     /**
      * Kompetisi yang didaftari oleh tim ini.
@@ -39,6 +53,14 @@ class Registration extends Model
     public function peserta(): BelongsTo
     {
         return $this->belongsTo(User::class, 'peserta_id');
+    }
+
+    /**
+     * Penyelenggara yang memverifikasi pendaftaran ini.
+     */
+    public function verifier(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'verified_by');
     }
 
     /**

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\CompetitionDetailController;
 use App\Http\Controllers\ExploreController;
@@ -48,6 +49,11 @@ Route::middleware(['auth', 'role:penyelenggara'])
         Route::resource('lomba', CompetitionController::class)
             ->except(['show'])
             ->parameters(['lomba' => 'id']);
+
+        // Master Kategori Lomba
+        Route::resource('kategori', CategoryController::class)
+            ->except(['show'])
+            ->parameters(['kategori' => 'id']);
 
         // Validasi berkas pendaftaran tim
         Route::get('/validasi', [VerificationController::class, 'index'])->name('validasi.index');

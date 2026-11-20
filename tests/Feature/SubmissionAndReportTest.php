@@ -242,7 +242,7 @@ class SubmissionAndReportTest extends TestCase
         // Peserta tidak boleh buka laporan penyelenggara
         $this->actingAs($peserta1)
             ->get(route('penyelenggara.laporan.index'))
-            ->assertRedirect('/login');
+            ->assertForbidden();
 
         // Penyelenggara membuka semua laporan
         $response = $this->actingAs($organizer)

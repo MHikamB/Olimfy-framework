@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCompetitionRequest;
 use App\Models\Competition;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
@@ -14,13 +16,23 @@ class CompetitionController extends Controller
     /**
      * Tampilkan daftar lomba milik penyelenggara yang login.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $competitions = Competition::where('organizer_id', auth()->id())
-            ->latest()
-            ->get();
+        $search = trim((string) $request->query('q', ''));
 
-        return view('penyelenggara.competitions.index', compact('competitions'));
+        $competitions = Competition::query()
+            ->where('organizer_id', auth()->id())
+            ->when($search !== '', function (Builder $query) use ($search): void {
+                $query->where(function (Builder $query) use ($search): void {
+                    $query->where('judul', 'like', "%{$search}%")
+                        ->orWhere('kategori', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('penyelenggara.competitions.index', compact('competitions', 'search'));
     }
 
     /**
@@ -90,6 +102,12 @@ class CompetitionController extends Controller
     public function destroy(int $id): RedirectResponse
     {
         $competition = $this->findOwnedCompetition($id);
+
+        if ($competition->registrations()->exists()) {
+            return redirect()
+                ->back()
+                ->with('error', 'Kompetisi tidak dapat dihapus karena sudah memiliki data pendaftaran peserta.');
+        }
 
         $this->deletePoster($competition->poster_path);
         $competition->delete();
