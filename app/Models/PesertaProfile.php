@@ -12,7 +12,7 @@ class PesertaProfile extends Model
         'institusi',
         'jenjang',
         'jurusan',
-        'no_hp'
+        'no_hp',
     ];
 
     public function user()

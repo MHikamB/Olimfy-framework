@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -25,6 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'role_id',
     ];
 
     /**
@@ -48,6 +50,57 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Sinkronkan kolom lama `role` dengan relasi `role_id` saat model disimpan.
+     *
+     * Kolom `role` dipertahankan sementara agar kode lama tetap berjalan,
+     * sehingga keduanya harus selalu bernilai sama.
+     */
+    protected static function booted(): void
+    {
+        static::saving(function (User $user): void {
+            if ($user->isDirty('role_id') && $user->role_id !== null) {
+                $namaRole = Role::query()
+                    ->whereKey($user->role_id)
+                    ->value('nama_role');
+
+                if ($namaRole !== null) {
+                    $user->role = $namaRole;
+                }
+
+                return;
+            }
+
+            if ($user->isDirty('role')) {
+                $roleId = Role::query()
+                    ->where('nama_role', $user->role)
+                    ->value('id');
+
+                if ($roleId !== null) {
+                    $user->role_id = $roleId;
+                }
+            }
+        });
+    }
+
+    /**
+     * Role master yang dimiliki pengguna.
+     */
+    public function roleRecord(): BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    /**
+     * Periksa apakah pengguna memiliki role tertentu.
+     *
+     * Fallback ke kolom lama `role` selama masa transisi.
+     */
+    public function hasRole(string $roleName): bool
+    {
+        return ($this->roleRecord?->nama_role ?? $this->role) === $roleName;
     }
 
     /**

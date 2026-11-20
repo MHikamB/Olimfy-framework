@@ -16,20 +16,49 @@
 
     <div class="card shadow-sm">
         <div class="card-header">
-            <h2 class="card-title h6 mb-0 fw-bold">
-                <i class="bi bi-trophy me-2" aria-hidden="true"></i>
-                Daftar Lomba
-            </h2>
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <h2 class="card-title h6 mb-0 fw-bold">
+                    <i class="bi bi-trophy me-2" aria-hidden="true"></i>
+                    Daftar Lomba
+                </h2>
+
+                <form method="GET" action="{{ route('penyelenggara.lomba.index') }}" class="d-flex gap-2">
+                    <label for="q" class="visually-hidden">Cari lomba</label>
+                    <input type="search"
+                           id="q"
+                           name="q"
+                           value="{{ $search }}"
+                           class="form-control form-control-sm"
+                           placeholder="Cari judul atau kategori..."
+                           style="min-width: 240px;">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-search me-1" aria-hidden="true"></i>
+                        Cari
+                    </button>
+                    @if ($search !== '')
+                        <a href="{{ route('penyelenggara.lomba.index') }}" class="btn btn-sm btn-outline-secondary">
+                            Reset
+                        </a>
+                    @endif
+                </form>
+            </div>
         </div>
 
         <div class="card-body p-0">
             @if ($competitions->isEmpty())
                 <div class="p-5 text-center text-body-secondary">
                     <i class="bi bi-inbox fs-1 d-block mb-2" aria-hidden="true"></i>
-                    <p class="mb-3">Anda belum mempublikasikan lomba.</p>
-                    <a href="{{ route('penyelenggara.lomba.create') }}" class="btn btn-outline-primary btn-sm">
-                        Publikasikan Lomba Pertama
-                    </a>
+                    @if ($search !== '')
+                        <p class="mb-3">Tidak ada lomba yang cocok dengan "{{ $search }}".</p>
+                        <a href="{{ route('penyelenggara.lomba.index') }}" class="btn btn-outline-secondary btn-sm">
+                            Tampilkan semua lomba
+                        </a>
+                    @else
+                        <p class="mb-3">Anda belum mempublikasikan lomba.</p>
+                        <a href="{{ route('penyelenggara.lomba.create') }}" class="btn btn-outline-primary btn-sm">
+                            Publikasikan Lomba Pertama
+                        </a>
+                    @endif
                 </div>
             @else
                 <div class="table-responsive">
@@ -99,5 +128,11 @@
                 </div>
             @endif
         </div>
+
+        @if ($competitions->hasPages())
+            <div class="card-footer bg-body">
+                {{ $competitions->links() }}
+            </div>
+        @endif
     </div>
 @endsection

@@ -10,13 +10,20 @@ class CheckRole
 {
     /**
      * Batasi akses route berdasarkan role pengguna.
+     *
+     * Role dibaca dari relasi database `roleRecord`, dengan fallback ke
+     * kolom lama `role` selama masa transisi.
      */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        $user = $request->user();
+        if (! $request->user()) {
+            return redirect('/login');
+        }
 
-        if (! $user || ! in_array($user->role, $roles, true)) {
-            return redirect('/login')->with('error', 'Akses ditolak!');
+        $userRole = $request->user()->roleRecord?->nama_role ?? $request->user()->role;
+
+        if (! in_array($userRole, $roles, true)) {
+            abort(403, 'Anda tidak memiliki hak akses ke halaman ini.');
         }
 
         return $next($request);
