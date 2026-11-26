@@ -13,9 +13,7 @@ use Illuminate\View\View;
 
 class CompetitionController extends Controller
 {
-    /**
-     * Tampilkan daftar lomba milik penyelenggara yang login.
-     */
+
     public function index(Request $request): View
     {
         $search = trim((string) $request->query('q', ''));
@@ -35,17 +33,11 @@ class CompetitionController extends Controller
         return view('penyelenggara.competitions.index', compact('competitions', 'search'));
     }
 
-    /**
-     * Tampilkan formulir tambah lomba.
-     */
     public function create(): View
     {
         return view('penyelenggara.lomba-buat');
     }
 
-    /**
-     * Simpan lomba baru beserta posternya.
-     */
     public function store(StoreCompetitionRequest $request): RedirectResponse
     {
         $data = $request->validated();
@@ -64,9 +56,6 @@ class CompetitionController extends Controller
             ->with('success', 'Lomba berhasil dipublikasikan!');
     }
 
-    /**
-     * Tampilkan formulir edit lomba milik penyelenggara yang login.
-     */
     public function edit(int $id): View
     {
         $competition = $this->findOwnedCompetition($id);
@@ -74,9 +63,6 @@ class CompetitionController extends Controller
         return view('penyelenggara.competitions.edit', compact('competition'));
     }
 
-    /**
-     * Perbarui data lomba milik penyelenggara yang login.
-     */
     public function update(StoreCompetitionRequest $request, int $id): RedirectResponse
     {
         $competition = $this->findOwnedCompetition($id);
@@ -96,9 +82,6 @@ class CompetitionController extends Controller
             ->with('success', 'Data lomba berhasil diperbarui!');
     }
 
-    /**
-     * Hapus lomba beserta posternya.
-     */
     public function destroy(int $id): RedirectResponse
     {
         $competition = $this->findOwnedCompetition($id);
@@ -117,17 +100,11 @@ class CompetitionController extends Controller
             ->with('success', 'Lomba berhasil dihapus!');
     }
 
-    /**
-     * Ambil lomba yang benar-benar milik penyelenggara yang login.
-     */
     private function findOwnedCompetition(int $id): Competition
     {
         return Competition::where('organizer_id', auth()->id())->findOrFail($id);
     }
 
-    /**
-     * Simpan poster ke public/uploads/posters dan kembalikan path relatifnya.
-     */
     private function storePoster(UploadedFile $poster): string
     {
         $directory = public_path('uploads/posters');
@@ -139,9 +116,6 @@ class CompetitionController extends Controller
         return 'uploads/posters/'.$filename;
     }
 
-    /**
-     * Hapus file poster lama jika masih ada.
-     */
     private function deletePoster(?string $posterPath): void
     {
         if ($posterPath && File::exists(public_path($posterPath))) {

@@ -35,17 +35,13 @@ class CategoryController extends Controller
         return view('penyelenggara.categories.index', compact('categories', 'search'));
     }
 
-    /**
-     * Tampilkan formulir tambah kategori.
-     */
+
     public function create(): View
     {
         return view('penyelenggara.categories.create');
     }
 
-    /**
-     * Simpan kategori baru.
-     */
+
     public function store(StoreCategoryRequest $request): RedirectResponse
     {
         Category::create($request->validated());
@@ -55,9 +51,7 @@ class CategoryController extends Controller
             ->with('success', 'Kategori berhasil ditambahkan!');
     }
 
-    /**
-     * Tampilkan formulir edit kategori.
-     */
+
     public function edit(int $id): View
     {
         $category = Category::findOrFail($id);
@@ -65,9 +59,7 @@ class CategoryController extends Controller
         return view('penyelenggara.categories.edit', compact('category'));
     }
 
-    /**
-     * Perbarui data kategori.
-     */
+
     public function update(UpdateCategoryRequest $request, int $id): RedirectResponse
     {
         $category = Category::findOrFail($id);
@@ -79,9 +71,7 @@ class CategoryController extends Controller
             ->with('success', 'Kategori berhasil diperbarui!');
     }
 
-    /**
-     * Hapus kategori jika belum dipakai oleh kompetisi mana pun.
-     */
+
     public function destroy(int $id): RedirectResponse
     {
         $category = Category::findOrFail($id);
@@ -99,12 +89,7 @@ class CategoryController extends Controller
             ->with('success', 'Kategori berhasil dihapus!');
     }
 
-    /**
-     * Cek pemakaian kategori pada kompetisi.
-     *
-     * Sebelum Step 3, kompetisi masih menyimpan nama kategori pada kolom
-     * `kategori`. Setelah kolom `category_id` tersedia, relasi ikut dicek.
-     */
+
     private function isUsedByCompetition(Category $category): bool
     {
         return Competition::query()

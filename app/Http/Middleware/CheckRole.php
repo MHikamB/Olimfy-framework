@@ -8,12 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
 {
-    /**
-     * Batasi akses route berdasarkan role pengguna.
-     *
-     * Role dibaca dari relasi database `roleRecord`, dengan fallback ke
-     * kolom lama `role` selama masa transisi.
-     */
+
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
         if (! $request->user()) {
