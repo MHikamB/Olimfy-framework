@@ -69,7 +69,7 @@ class ParticipantRegistrationTest extends TestCase
 
         $this->actingAs($organizer)
             ->get(route('peserta.pendaftaran.index'))
-            ->assertRedirect('/login');
+            ->assertForbidden();
     }
 
     public function test_peserta_can_view_registration_form_for_open_competition(): void

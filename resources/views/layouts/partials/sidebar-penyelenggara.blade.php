@@ -15,6 +15,14 @@
 </li>
 
 <li class="nav-item">
+    <a href="{{ url('penyelenggara/kategori') }}"
+       class="nav-link {{ request()->is('penyelenggara/kategori*') ? 'active' : '' }}">
+        <i class="nav-icon bi bi-tags" aria-hidden="true"></i>
+        <p>Master Kategori</p>
+    </a>
+</li>
+
+<li class="nav-item">
     <a href="{{ url('penyelenggara/validasi') }}"
        class="nav-link {{ request()->is('penyelenggara/validasi*') ? 'active' : '' }}">
         <i class="nav-icon bi bi-file-earmark-check" aria-hidden="true"></i>

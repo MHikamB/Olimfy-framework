@@ -11,7 +11,7 @@ class Notification extends Model
         'judul',
         'pesan',
         'tipe',
-        'is_read'
+        'is_read',
     ];
 
     public function user()

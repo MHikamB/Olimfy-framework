@@ -20,4 +20,5 @@ class CompetitionDetailController extends Controller
 
         return view('lomba-detail', compact('competition', 'isBookmarked'));
     }
+    
 }

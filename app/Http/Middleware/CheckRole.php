@@ -8,15 +8,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
 {
-    /**
-     * Batasi akses route berdasarkan role pengguna.
-     */
+
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        $user = $request->user();
+        if (! $request->user()) {
+            return redirect('/login');
+        }
 
-        if (! $user || ! in_array($user->role, $roles, true)) {
-            return redirect('/login')->with('error', 'Akses ditolak!');
+        $userRole = $request->user()->roleRecord?->nama_role ?? $request->user()->role;
+
+        if (! in_array($userRole, $roles, true)) {
+            abort(403, 'Anda tidak memiliki hak akses ke halaman ini.');
         }
 
         return $next($request);

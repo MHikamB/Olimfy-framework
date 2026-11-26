@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -65,20 +66,23 @@ class AuthController extends Controller
             'role' => ['required', Rule::in(['peserta', 'penyelenggara'])],
         ]);
 
+        $role = Role::where('nama_role', $validated['role'])->firstOrFail();
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
+            'role' => $role->nama_role,
+            'role_id' => $role->id,
         ]);
 
         Auth::login($user);
 
         $request->session()->regenerate();
 
-        session(['user_role' => $user->role]);
+        session(['user_role' => $role->nama_role]);
 
-        return $this->redirectToDashboard($user->role);
+        return $this->redirectToDashboard($role->nama_role);
     }
 
     /**
